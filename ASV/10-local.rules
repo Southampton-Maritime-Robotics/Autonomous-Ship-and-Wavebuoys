@@ -1,0 +1,5 @@
+KERNEL=="ttyUSB?", ATTRS{idProduct}=="2303",ATTRS{idVendor}=="067b", NAME="usbgps",GROUP=="gdp40", OWNER=="gdp40", MODE=="0666"
+
+KERNEL=="ttyUSB?", ATTRS{idProduct}=="ea60",ATTRS{idVendor}=="10c4", NAME="usbcompass",GROUP=="gdp40", OWNER=="gdp40", MODE=="0666"
+
+KERNEL=="ttyUSB?", ATTRS{idProduct}=="6001",ATTRS{idVendor}=="0403", NAME="usbarduino",GROUP=="gdp40", OWNER=="gdp40", MODE=="0666"

@@ -1,0 +1,3 @@
+float32 battery_voltage
+float32 prop_demand
+float32 voltage_demand

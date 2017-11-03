@@ -1,0 +1,200 @@
+
+/*************************************
+         THRUST BLOCK ARDUINO
+**************************************
+
+// ... Communicates with Motor Controller
+// ... Measures shaft RPM
+// ... Measures motor current
+// ... Measures motor voltage
+// ... Measures motor casing temperature
+*/
+
+#include "arduino.h"
+#include "avr/pgmspace.h"
+#include "Wire.h"
+#include "Timer.h"
+#include "MemoryFree.h"
+#include "i2c_helper.h"
+#include "adc_helper.h"
+#include <Servo.h> 
+
+/*************************************
+              SETTINGS
+**************************************/
+#define RUDDER_ZERO 1800.0
+#define RUDDER_CONSTANT 0.1
+
+#define NUM_AVERAGE 10
+int sample_num = 0;
+float rudderTargetAngle = 0;
+float rudderAngle = 0;
+
+/*************************************
+              DEFINITIONS
+**************************************/
+//... Pin Definitions
+#define LED 9
+#define SERVO 3
+
+// ... Slave Address
+#define RUDDER 13
+
+/*************************************
+              VARIABLES
+**************************************/
+Timer timer;
+Servo myservo;
+int servoNow = 1500;
+int adc1_samples[NUM_AVERAGE];
+String readString;
+
+/*************************************
+              SETUP
+**************************************/
+void setup()
+{
+  Wire.begin(RUDDER);
+  Wire.onReceive(receiveEvent);
+  Wire.onRequest(requestEvent);
+  
+  pinMode(SELPIN, OUTPUT);
+  pinMode(DATAOUT, OUTPUT);
+  pinMode(DATAIN, INPUT);
+  pinMode(SPICLOCK, OUTPUT);  
+ 
+  
+  Serial.begin(115200);
+  pinMode(LED,OUTPUT);
+  digitalWrite(LED,LOW);
+  
+  //pinMode(3,OUTPUT);
+  myservo.attach(5,600,2400);
+  Serial.println(myservo.attached());
+  
+  
+  
+  timer.every(1, readSensor);
+  timer.every(25, moveRudder);
+}
+
+/*************************************
+             LOOP
+**************************************/
+void loop()
+{
+  timer.update();
+  
+  // DELETE AFTER
+  while (Serial.available()) {
+    char c = Serial.read();  //gets one byte from serial buffer
+    readString += c; //makes the string readString
+    delay(2);  // allow buffer to fill with next character
+  }
+
+  if (readString.length() >0) {
+    Serial.println(readString);  //so you can see the captured string
+    int n = readString.toInt();
+
+    // auto select appropriate value, copied from someone elses code.
+      Serial.print("writing Angle: ");
+      Serial.println(n);
+      rudderTargetAngle = (float)n;
+      
+    readString=""; //empty for next input
+  }
+  
+}
+
+void readSensor()
+{
+  adc1_samples[sample_num] = read_adc(1);
+  float sum1 = 0;
+  for (int i = 0; i < NUM_AVERAGE; i++)
+    sum1 += adc1_samples[i];
+  
+  rudderAngle = -((float)sum1/ (float)NUM_AVERAGE - RUDDER_ZERO) * RUDDER_CONSTANT;
+  sample_num = (sample_num + 1) % NUM_AVERAGE;
+  Serial.print((float)sum1/(float)NUM_AVERAGE);
+}
+
+void moveRudder()
+{
+  float diff = abs(rudderAngle - rudderTargetAngle);
+  
+  if (diff > 10) // degrees
+  {
+    if (rudderAngle < rudderTargetAngle && servoNow < 2450)
+    {
+      servoNow += 15;
+      myservo.writeMicroseconds(servoNow);
+      Serial.println(myservo.attached());
+    }
+    if (rudderAngle > rudderTargetAngle && servoNow > 0)
+    {
+      servoNow -= 15;
+      myservo.writeMicroseconds(servoNow);
+      Serial.println(myservo.attached());
+    }
+  }
+  else if (diff > 5) // degrees
+  {
+    if (rudderAngle < rudderTargetAngle && servoNow < 2450)
+    {
+      servoNow += 5;
+      myservo.writeMicroseconds(servoNow);
+      Serial.println(myservo.attached());
+    }
+    if (rudderAngle > rudderTargetAngle && servoNow > 0)
+    {
+      servoNow -= 5;
+      myservo.writeMicroseconds(servoNow);
+      Serial.println(myservo.attached());
+    }
+  }
+  else if (diff > 1) // degrees
+  {
+    if (rudderAngle < rudderTargetAngle && servoNow < 2450)
+    {
+      servoNow += 1;
+      myservo.writeMicroseconds(servoNow);
+      Serial.println(myservo.attached());
+    }
+    if (rudderAngle > rudderTargetAngle && servoNow > 0)
+    {
+      servoNow -= 1;
+      myservo.writeMicroseconds(servoNow);
+      Serial.println(myservo.attached());
+    }
+  }
+  
+  //Serial.print(servoNow);
+  //Serial.print("   ");
+  //Serial.println(rudderAngle);
+  
+    
+  
+}
+
+// **************************************
+//       i2c RECEIVE EVENT HANDLER
+// **************************************
+void receiveEvent(int _)
+{
+  boolean heartbeat = true;
+  WireReadAnything(heartbeat);
+  if (!heartbeat)
+  {
+    WireReadAnything((float&)rudderTargetAngle);
+  }
+  else //blink
+  {
+    analogWrite(LED, 100);
+    timer.pulse(LED, 50, LOW);
+  }
+}
+
+void requestEvent()
+{
+  WireWriteAnything(rudderAngle); // 4 bytes
+}

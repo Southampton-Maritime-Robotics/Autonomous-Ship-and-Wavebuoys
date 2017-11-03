@@ -1,0 +1,33 @@
+Node 1   arduino.py
+Node 2   arduino_converter.py
+Node 3   qinetiq.py
+Node 4   gps.py
+Node 5   compass.py
+Node 6   heading_dummy.py
+Node 7	 arduino_dummy.py
+
+
+
+///////////////// List of logfiles and their contents /////////////////////
+
+compassLog.csv  -->  time, heading, roll, pitch, temperature, m, mx, my, mz, a, ax, ay, az (compass)
+heading_demandLog.csv  -->  time, heading angle demand
+Setrudder_demandLog.csv -->  time, rudder angle demand
+rudder_demandLog.csv --> time, rudder angle demand as seen by the arduinos
+rudder_angleLog.csv  --> time, rudder angle (arduinos)
+Setmotor_settingLog.csv --> time, motor setting (1: motor voltage demand, 2: prop rpm demand, 3: motor power demand)
+motor_settingLog.csv --> time, motor setting as seen by the arduinos
+Setmotor_demandLog.csv --> time, motor demand (according to setting)
+motor_demandLog.csv --> time, motor demand as seen by the arduinos
+prop_rpmLog.csv --> time, propeller rpm (arduinos)
+motor_voltageLog.csv --> time, motor voltage (arduinos)
+motor_currentLog.csv --> time, motor current (arduinos)
+motor_powerLog.csv --> time, motor power (arduinos)
+thrustLog.csv --> time, thrust (arduinos)
+positionLog.csv --> time, X-position, Y-position, speed, latitude, longitude, valid GPS fix (gps)
+voltageLog.csv --> time, battery voltage (arduinos)
+temperatureLog.csv --> time, electronics case temperature (arduinos)
+dutycycleLog.csv --> time, motor duty cycle (arduinos)
+mission.txt --> time, mission script
+
+

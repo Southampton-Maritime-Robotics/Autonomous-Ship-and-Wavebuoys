@@ -1,0 +1,8 @@
+float32 X
+float32 Y
+float32 speed
+float64 lat
+float64 long
+flaot64 time
+int8 ValidGPSfix
+int8 number_of_satellites

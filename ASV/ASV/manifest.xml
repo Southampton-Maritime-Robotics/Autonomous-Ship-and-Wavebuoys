@@ -1,0 +1,23 @@
+<package>
+  <description brief="ASV">
+
+     ASV
+
+  </description>
+  <author>GDP40</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/ASV</url>
+  <depend package="std_msgs"/>
+  <depend package="rospy"/>
+  <depend package="roscpp"/>
+  <depend package="roslib"/>
+  <depend package="smach"/>
+  <depend package="smach_viewer"/>
+  <depend package="smach_ros"/>
+  <depend package="rosserial_arduino"/>
+  <depend package="rosserial_python"/>
+
+</package>
+
+

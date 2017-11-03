@@ -1,0 +1,70 @@
+<launch>
+<!--##############################################################################  	-->
+<!--#asv_mission.launch									-->
+<!--#											-->
+<!--#Initial code is a simplified subset of delphin_mission.launch from DelphinROSv2	-->
+<!--#Code by Dr Alexander Brian Phillips, Leo Steenson and Catherine Harris		-->
+<!--#Code updated by Enrico Anderlini (ea3g09@soton.ac.uk)				-->
+<!--#											-->
+<!--#Modifications to code								-->
+<!--# 21/11/2012	Modified code for ASV	ABP					-->
+<!--# 07/02/2013        Updated and corrected for actual use				-->
+<!--# 27/02/2013	Modified for use in lakes rather than QinetiQ			-->
+<!--#											-->
+<!--#############################################################################	-->
+<!--#Notes										-->
+<!--#											-->
+<!--#This code launches the ros nodes required to run the ASV				-->
+<!--#However, it is important to launch the C++ node to be run on the Arduino 		-->
+<!--#(thus not arduino.py, but rather arduino.ino) from the arduino program run from	-->
+<!--#/Downloads/arduino-1.0.3 , command: ./arduino                                      -->
+<!--##############################################################################	-->
+
+
+    <param name="over-pitch"          value="45" />                   <!-- Maximum pitch (deg) - causes abort -->
+    <param name="over-roll"           value="45" />                   <!-- Maximum roll (deg) - causes abort -->
+    <param name="max-internal-temp"   value="50" />                   <!-- Maximum internal pressure vessel temp (deg) - causes abort -->
+    <param name="min-battery-voltage" value="8" />                   <!-- Minimum Motor voltage (mV) - causes abort -->
+    <param name="mission-timeout"     value="240" />                   <!-- Mission timeout (minutes) -->
+    <!-- Change the following values with those corresponding to the lake -->
+    <param name="lat_orig"            value="51.0149116667" />    <!-- Origin Latitude -->
+    <param name="long_orig"           value="-1.49480166667" />   <!-- Origin Longitude -->
+  
+    <!-- Add monitoring nodes under here! -->  
+    <node name="back_seat_driver" pkg="ASV" type="BackSeatDriver.py" output="screen" required="true" />  
+    <!-- <node name="Logger" pkg="ASV" type="logger.py" />
+    <node name="averager" pkg="ASV" type="averager.py" /> -->
+
+    <!-- Identify mission script / This also starts the smach states -->    
+    <!-- <node name="mission_script" pkg="ASV" type="mission_script.py"  output="screen" required="true" /> -->
+    
+    <!-- Add hardware nodes under here! -->
+    <!-- <node name="compass" pkg="ASV" type="compass_dummy.py" /> -->
+    <node name="OceanServer_compass" pkg="ASV" type="compass.py" />
+    <!-- <node name="gps" pkg="ASV" type="gps_dummy.py" /> -->
+    <node name="gps" pkg="ASV" type="gps.py" />
+    <!--<node name="arduino" pkg="ASV" type="arduino_dummy.py" /> --> 
+    <node name="arduino" pkg="ASV" type="arduino.py" /> 
+    <node name="arduino_converter" pkg="ASV" type="arduino_converter.py" /> 
+    <!-- <node name="voltage" pkg="ASV" type="voltage_dummy.py" /> -->     
+
+    <!-- Add controller nodes under here! -->
+    <!-- <node name="heading_dummy" pkg="ASV" type="heading_dummy.py"/> -->
+    <node name="heading_controller" pkg="ASV" type="heading_controller.py"/>
+
+    <!-- Add nodes for self-propulsion tests under here! -->
+    <!-- Change type name with following options:
+	 Full-load, rpm < self-propulsion point: qinetiq_fulllow.py
+	 Full-load, rpm = self-propulsion point: qinetiq_fullself.py
+	 Full-load, rpm > self-propulsion point: qinetiq_fullhigh.py
+	 
+	 Ballast, rpm < self-propulsion point: qinetiq_ballow.py
+	 Ballast, rpm = self-propulsion point: qinetiq_ballow.py
+	 Ballast, rpm > self-propulsion point: qinetiq_ballow.py      -->
+
+    <!--<node name="QinetiQ" pkg="ASV" type="qinetiq_fulllow.py" /> -->
+
+    <!-- Activate smach_viewer -->
+    <!--<node name="smach_viewer" pkg="smach_viewer" type="smach_viewer.py" />-->
+
+</launch>
