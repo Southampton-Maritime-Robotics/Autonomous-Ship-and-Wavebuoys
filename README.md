@@ -14,7 +14,7 @@ The main software contributions were from James Hawkes (Arduinos and Wavebuoy), 
 
 ## License
 
-With permission from the copyright holders (Hawkes, Anderlini, Le), the code has been released under the permissive MIT license
+With permission from the copyright holders (Hawkes, Anderlini, Le), the code has been released under the permissive MIT license.
 
 ## Citation
 
