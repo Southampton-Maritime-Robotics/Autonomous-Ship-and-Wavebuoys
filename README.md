@@ -16,7 +16,7 @@ For related projects see: https://github.com/Southampton-Maritime-Robotics
 
 ## License
 
-With permission from the copyright holders (Hawkes, Anderlini, Le), the code has been released under the permissive MIT license.
+With permission from the copyright holders (Hawkes, Anderlini, Le), the code has been released under the permissive MIT license. See the license file for details.
 
 ## Citation
 
