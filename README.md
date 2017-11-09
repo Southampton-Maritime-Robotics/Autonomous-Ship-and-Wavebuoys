@@ -12,6 +12,8 @@ There were many non-coding tasks in the project, including development of the po
 
 The main software contributions were from James Hawkes (Arduinos and Wavebuoy), Enrico Anderlini (ROS), and Hieu Le (Rudder Arduinos); heavily assisted by Heather Crossley, Kimberley Neale, James Mozden and Ben Thornton. The supervisory team were Stephen Turnock, Dominic Hudson and Alexander Phillips.
 
+For related projects see: https://github.com/Southampton-Maritime-Robotics
+
 ## License
 
 With permission from the copyright holders (Hawkes, Anderlini, Le), the code has been released under the permissive MIT license.
